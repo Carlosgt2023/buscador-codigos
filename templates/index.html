@@ -1,28 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta charset="utf-8">
-    <title>Consulta de Códigos</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesas Comisión Electoral STECSA</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    
+    <br>
     <div class="container">
-        <h1>Consulta de Códigos</h1>
-        <form method="POST">
-            <input type="text" name="codigo" placeholder="Ingrese código" required value="{{ codigo or '' }}">
-            <button type="submit">Buscar</button>
+        <div class="contenedor-imagenes" style="text-align: center;">
+            <img src="static/logostecsa.png" class="logo">
+            <img src="static/logocomisionelectoral.png" class="logo">
+        </div>
+        <br>
+        <br>
+        <div class="header">
+            <h1>Mesas Comisión Electoral STECSA</h1>
+            <p class="subtitle">🔍 Ingresa el código para buscar información</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('buscar') }}">
+            <div class="search-box">
+                <input type="text" name="codigo" placeholder="Ingrese código" required autofocus>
+                <button type="submit">
+                    <span class="button-text">Buscar</span>
+                    <span class="button-icon">🔎</span>
+                </button>
+            </div>
         </form>
 
-        {% if resultado %}
-            <h2>Resultado:</h2>
-            <ul>
-                {% for item in resultado %}
-                    <li>{{ item }}</li>
-                {% endfor %}
-            </ul>
-        {% elif codigo %}
-            <p class="no-result">No se encontró el código "{{ codigo }}"</p>
+        {% if error %}
+            <div class="alert alert-error">
+                <strong>⚠️ Error:</strong> {{ error }}
+            </div>
+        {% endif %}
+
+        {% if codigo %}
+            {% if resultado %}
+                <div class="result-card">
+                    <div class="result-header">
+                        <h3>✅ Resultado encontrado</h3>
+                        <span class="codigo-badge">Código: {{ codigo }}</span>
+                    </div>
+                    
+                    <div class="result-content">
+                        <div class="info-item">
+                            <span class="info-label">👤 Nombre:</span>
+                            <span class="info-value">{{ resultado[0] }}</span>
+                        </div>
+                        
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">📊 Mesa:</span>
+                                <span class="info-value">{{ resultado[1] }}</span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <span class="info-label">📊 Hoja:</span>
+                                <span class="info-value">{{ resultado[2] }}</span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <span class="info-label">📊 Linea:</span>
+                                <span class="info-value">{{ resultado[3] }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="button-container">
+                            <a href="{{ url_for('index') }}" class="btn-nueva-busqueda">
+                                🔄 Nueva Búsqueda
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="alert alert-warning">
+                    <strong>❌ No encontrado:</strong> No se encontró el código "{{ codigo }}"
+                </div>
+                <div class="button-container">
+                    <a href="{{ url_for('index') }}" class="btn-nueva-busqueda">
+                        🔄 Nueva Búsqueda
+                    </a>
+                </div>
+            {% endif %}
         {% endif %}
     </div>
+
+    <footer>
+        <p>Sistema de Consulta STECSA © 2025</p>
+    </footer>
 </body>
 </html>
