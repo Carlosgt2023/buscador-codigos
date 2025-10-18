@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Consulta de Códigos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Consulta de Códigos</h1>
+        <form method="POST">
+            <input type="text" name="codigo" placeholder="Ingrese código" required value="{{ codigo or '' }}">
+            <button type="submit">Buscar</button>
+        </form>
+
+        {% if resultado %}
+            <h2>Resultado:</h2>
+            <ul>
+                {% for item in resultado %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        {% elif codigo %}
+            <p class="no-result">No se encontró el código "{{ codigo }}"</p>
+        {% endif %}
+    </div>
+</body>
+</html>
